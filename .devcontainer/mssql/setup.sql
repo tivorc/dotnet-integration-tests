@@ -1,5 +1,8 @@
-use restaurant;
-go
+IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'restaurant')
+BEGIN
+  USE restaurant;
+END
+GO
 
 DROP TABLE IF EXISTS dbo.products;
 DROP TABLE IF EXISTS dbo.orders;
