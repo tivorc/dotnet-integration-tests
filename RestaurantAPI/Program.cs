@@ -1,6 +1,7 @@
 using System.Text.Json;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
+using RestaurantAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ if (string.IsNullOrEmpty(connectionString))
     throw new ArgumentNullException("Connection string is null or empty");
 }
 
-builder.Services.AddScoped(s => new DbConnection(connectionString));
+builder.Services.AddScoped<IDatabaseConnection>(s => new DatabaseConnection(connectionString));
 
 var app = builder.Build();
 
@@ -26,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/api/orders", async (DbConnection db) =>
+app.MapGet("/api/orders", async (IDatabaseConnection db) =>
 {
     var orders = await db.GetList<Order>("dbo.get_orders", new Dictionary<string, object> { });
     return Results.Ok(orders);
@@ -34,7 +35,7 @@ app.MapGet("/api/orders", async (DbConnection db) =>
 .WithName("GetOrders")
 .WithOpenApi();
 
-app.MapGet("/api/order/{orderId}", async (DbConnection db, Guid orderId) =>
+app.MapGet("/api/order/{orderId}", async (IDatabaseConnection db, Guid orderId) =>
 {
     var order = await db.GetOne<Order>("dbo.get_order_by_id", new Dictionary<string, object> { { "order_id", orderId } });
     return Results.Ok(order);
@@ -42,7 +43,7 @@ app.MapGet("/api/order/{orderId}", async (DbConnection db, Guid orderId) =>
 .WithName("GetOrderById")
 .WithOpenApi();
 
-app.MapPost("/api/order", async (DbConnection db, Order order) =>
+app.MapPost("/api/order", async (IDatabaseConnection db, Order order) =>
 {
     var serializedOrder = JsonSerializer.Serialize(order, new JsonSerializerOptions()
     {

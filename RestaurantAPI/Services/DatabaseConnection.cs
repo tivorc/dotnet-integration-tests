@@ -2,13 +2,14 @@ using System.Data;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Data.SqlClient;
+using RestaurantAPI.Services.Interfaces;
 
 namespace RestaurantAPI.Services;
 
-  public class DbConnection
+  public class DatabaseConnection : IDatabaseConnection
   {
     private readonly SqlConnection connection;
-    public DbConnection(string connectionString)
+    public DatabaseConnection(string connectionString)
     {
       connection = new SqlConnection(connectionString);
     }

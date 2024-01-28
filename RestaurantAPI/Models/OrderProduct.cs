@@ -5,9 +5,9 @@ public class OrderProduct
     public Guid Id { get; set; }
     public decimal Price { get; set; }
     public int Quantity { get; set; }
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
 
-    public OrderProduct(Guid id, decimal price, int quantity, Product product)
+    public OrderProduct(Guid id, decimal price, int quantity, Product? product = null)
     {
         Id = id;
         Price = price;
