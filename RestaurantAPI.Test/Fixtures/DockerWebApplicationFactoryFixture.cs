@@ -13,8 +13,9 @@ public class DockerWebApplicationFactoryFixture : WebApplicationFactory<Program>
 
     public DockerWebApplicationFactoryFixture()
     {
+        string path = Directory.GetCurrentDirectory();
         _dbContainer = new MsSqlBuilder()
-          .WithResourceMapping(new FileInfo("/workspaces/dotnet-integration-tests/.devcontainer/mssql/setup.sql"), "/scripts")
+          .WithResourceMapping(new FileInfo("../../../../.devcontainer/mssql/setup.sql"), "/scripts")
           .Build();
     }
 
